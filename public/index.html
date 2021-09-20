@@ -8,20 +8,61 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"
       integrity="sha512-EZLkOqwILORob+p0BXZc+Vm3RgJBOe1Iq/0fiI7r/wJgzOFZMlsqTa29UEl6v6U6gsV4uIpsNZoV32YZqrCRCQ=="
       crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+      #response-output {
+        background-color: black;
+        color: white;
+        overflow-x: auto;
+      }
+
+      pre {
+        white-space: pre-wrap;
+        /* Since CSS 2.1 */
+        white-space: -moz-pre-wrap;
+        /* Mozilla, since 1999 */
+        white-space: -pre-wrap;
+        /* Opera 4-6 */
+        white-space: -o-pre-wrap;
+        /* Opera 7 */
+        word-wrap: break-word;
+        /* Internet Explorer 5.5+ */
+        padding: 1rem;
+        border-radius: 5px;
+      }
+    </style>
     <title>Jamstack Explorers - Up and Running with Serverless Functions</title>
   </head>
 
   <body class="container">
-    <h1>Up and Running with Serverless Functions</h1>
-    <button id="fetch-btn">Fetch</button>
-    <button id="fetch-pokedex-btn">Fetch Pokedex</button>
-    <p id="response-output">Response Placeholder</p>
+    <div class="row">
+      <div class="u-fullwidth">
+        <h1>Up and Running with Serverless Functions</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="columns four">
+        <h2>Requests</h2>
+        <button id="fetch-btn">Fetch</button>
+        <button id="fetch-kanto-btn">Fetch Kanto Pokedex</button>
+        <button id="fetch-hoenn-btn">Fetch Hoenn Pokedex</button>
+        <button id="clear-btn" class="button-primary">Clear Response</button>
+      </div>
+      <div class="columns two"></div>
+      <div class="columns six">
+        <h2>Response:</h2>
+        <pre id="response-output">{}</pre>
+      </div>
+    </div>
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
+        const clearBtn = document.getElementById('clear-btn')
         const fetchBtn = document.getElementById('fetch-btn')
-        const fetchPokemonBtn = document.getElementById('fetch-pokedex-btn')
+        const fetchKantoBtn = document.getElementById('fetch-kanto-btn')
+        const fetchHoennBtn = document.getElementById('fetch-hoenn-btn')
         const responseText = document.getElementById('response-output')
+
+        clearBtn.addEventListener('click', () => responseText.innerText = '{}')
 
         fetchBtn.addEventListener('click', async () => {
           const response = await fetch('/.netlify/functions/hello-world').then(
@@ -31,8 +72,24 @@
           responseText.innerText = JSON.stringify(response)
         })
 
-        fetchPokemonBtn.addEventListener('click', async () => {
-          const response = await fetch('/.netlify/functions/pokedex').then(response => response.json())
+        fetchKantoBtn.addEventListener('click', async () => {
+          const response = await fetch('/.netlify/functions/pokedex', {
+            method: 'POST',
+            body: JSON.stringify({
+              region: 'kanto'
+            })
+          }).then(response => response.json())
+
+          responseText.innerText = JSON.stringify(response)
+        })
+
+        fetchHoennBtn.addEventListener('click', async () => {
+          const response = await fetch('/.netlify/functions/pokedex', {
+            method: 'POST',
+            body: JSON.stringify({
+              region: 'hoenn'
+            })
+          }).then(response => response.json())
 
           responseText.innerText = JSON.stringify(response)
         })

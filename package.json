@@ -1,7 +1,6 @@
 {
   "name": "netlify-functions-tutorial",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "git@github.com:stctheproducer/netlify-functions-tutorial.git",
   "author": "Chanda Mulenga <dev@stctheproducer.com>",
   "license": "MIT",
